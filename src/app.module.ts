@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JobPostsModule } from './job_posts/job_posts.module';
@@ -9,15 +8,12 @@ import { JobPost } from './job_posts/entities/job_post.entity';
 
 @Module({
   imports: [
-  ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
+      autoLoadEntities: true,
+      synchronize: true,
       entities: [JobPost],
-      synchronize: false,
-      ssl: {
-        rejectUnauthorized: false,
-      },
     }),
     JobPostsModule,
   ],
