@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'; 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JobPostsModule } from './job_posts/job_posts.module';
@@ -8,15 +9,15 @@ import { JobPost } from './job_posts/entities/job_post.entity';
 
 @Module({
   imports: [
+  ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'varji5697',
-      database: 'postgres',
+      url: process.env.DATABASE_URL,
       entities: [JobPost],
-      synchronize: true,
+      synchronize: false,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     JobPostsModule,
   ],
